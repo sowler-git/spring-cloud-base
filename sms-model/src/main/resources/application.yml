@@ -1,0 +1,4 @@
+jpush:
+  appKey: 8f9ffa3ebc96568bc61ce1db
+  masterSecret: 3a29351e58b14f908991c1e1
+  apnsProduction: false

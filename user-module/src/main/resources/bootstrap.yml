@@ -1,0 +1,90 @@
+server:
+  port: 8801
+
+spring:
+  profiles:
+    active: dev
+
+  application:
+    # 服务名称
+    name: user-service-model
+  cloud:
+#    alibaba:
+#      seata:
+#        tx-service-group: default_tx_group
+    sentinel:
+      enabled: false
+      eager: true # 取消控制台懒加载，项目启动即连接Sentinel
+      transport:
+        dashboard: localhost:8080  #控制台地址
+        #port: 8720
+
+  zipkin:
+    enabled: false
+    #zipkin服务所在地址
+    base-url: http://localhost:9411/
+    sender:
+      type: web #使用http的方式传输数据到, Zipkin请求量比较大，可以通过消息中间件来发送，比如 RabbitMQ
+    #配置采样百分比
+    sleuth:
+      sampler:
+        probability: 1 # 将采样比例设置为 1.0，也就是全部都需要。默认是0.1也就是10%，一般情况下，10%就够用了
+
+##打开debug日志
+logging:
+  level:
+    mapper: info
+  config:
+    classpath: logback-spring.xml
+
+##暴露端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+dubbo:
+  application:
+    name: user-service-model-provider
+  protocol:
+    name: dubbo
+    port: -1
+  provider:
+    group: DEFAULT_GROUP
+    version: 2.0
+  #port: 20881
+  registry:
+    address: nacos://${nacos.address:127.0.0.1}:8848?username=nacos&password=nacos
+    #配置nacos自定义命名空间
+    parameters:
+      namespace: 23857f22-27ac-4947-988a-1b88d4eeb807
+    group: DEFAULT_GROUP
+#  registry:
+#    address: zookeeper://${zookeeper.address:127.0.0.1}:2181
+  metadata-report:
+    address: nacos://${nacos.address:127.0.0.1}:8848?username=nacos&password=nacos
+    #配置nacos自定义命名空间
+    parameters:
+      namespace: 23857f22-27ac-4947-988a-1b88d4eeb807
+
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  # 客户端和服务端在同一个事务组  default_tx_group
+  tx-service-group: order_tx_group
+  # 自动数据源代理
+  enable-auto-data-source-proxy: true
+  # 数据源代理模式(分布式事务方案)
+  data-source-proxy-mode: AT
+  # 事务群组,配置项值为TC集群名,需要与服务端保持一致
+  service:
+    # 跟服务端配置保持一致
+    vgroup-mapping:
+      order_tx_group: default
+      order-public: default
+      default_tx_group: default
+    enable-degrade: false
+    disable-global-transaction: false
+    grouplist:
+      default: 127.0.0.1:8091

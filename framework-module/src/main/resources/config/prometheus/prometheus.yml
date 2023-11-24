@@ -1,0 +1,53 @@
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.采集被监控段指标的一个周期
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.  告警评估的一个周期
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration 告警的配置文件
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'. 告警规则配置
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself. 被监控端的配置,目前只有一个节点，就是prometheus本身
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+      
+  - job_name: "seata"
+  
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    
+    static_configs:
+    - targets: ["localhost:9898"]
+    
+  - job_name: "spring-boot-order-8810"
+  
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+    - targets: ["localhost:8810"]
+    
+  - job_name: "spring-boot-user-8801"
+  
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+    - targets: ["localhost:8801"]

@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    nacos:
+      # 服务注册
+      discovery:
+        server-addr: 127.0.0.1:8848
+        # 分组
+        group: DEFAULT_GROUP
+        # 注册到nacos上的服务名称，默认{${spring.application.name}
+        service: ${spring.application.name}
+        namespace: public
+      # 读取nacos上的服务配置
+      config:
+        server-addr: 127.0.0.1:8848
+        # 分组
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        namespace: public

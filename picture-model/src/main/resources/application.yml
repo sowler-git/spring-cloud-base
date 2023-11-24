@@ -1,0 +1,9 @@
+server:
+  port: 7001
+
+spring:
+  application:
+    name: picture-model
+  profiles:
+    active: dev
+

@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    nacos:
+      # 服务注册
+      discovery:
+        namespace: 23857f22-27ac-4947-988a-1b88d4eeb807
+        # 分组
+        group: dev
+        server-addr: 127.0.0.1:8848
+        # 注册到nacos上的服务名称，默认{${spring.application.name}
+        service: ${spring.application.name}
+      # 读取nacos上的服务配置
+      config:
+        server-addr: 127.0.0.1:8848
+        # 分组
+        group: dev
+        file-extension: yaml
+        namespace: 23857f22-27ac-4947-988a-1b88d4eeb807
+        shared-configs:
+         - data-id: redis-config-dev.yaml
+           group: spring-cloud-order-dev
+           refresh: true
